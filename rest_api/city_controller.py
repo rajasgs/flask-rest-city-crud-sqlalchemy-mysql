@@ -14,6 +14,9 @@ import json
  
 Base = declarative_base()
 
+POSTGRE_BASE = 'postgresql://test:test@localhost:5432/test'
+MYSQL_BASE = 'mysql://test:test111@localhost/test'
+
 '''
 # This is returning with quotes
 class AlchemyEncoder(json.JSONEncoder):
@@ -50,7 +53,7 @@ class City(Base):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4) 
 
 def get_session():
-    engine = create_engine('mysql://test:test111@localhost/test')
+    engine = create_engine(POSTGRE_BASE)
     Base.metadata.bind = engine
     
     DBSession = sessionmaker()
@@ -130,14 +133,16 @@ def update_city():
     country = request.args.get('country')
     
     session = get_session()
-    session.query(City).filter(City.id == id).update({City.name: name, City.state : state, City.country : country}, synchronize_session=False)
+    result = session.query(City).filter(City.id == id).update({City.name: name, City.state : state, City.country : country}, synchronize_session=False)
     session.commit()
     
     print('city['+name+' - '+state+' - '+country+'] updated')
     
-    print(ResultProxy.rowcount)
+    #print(ResultProxy.rowcount)
+
+    print('row count : ', result)
     
-    if ResultProxy.rowcount == 1:
+    if result == 1:
         result_json = {
             'result': 'ok',
             
