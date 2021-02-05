@@ -8,3 +8,5 @@ docutils
 flask_apscheduler
 IPy
 sqlalchemy
+psycopg2-binary
+python-dotenv

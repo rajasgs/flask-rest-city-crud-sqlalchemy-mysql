@@ -11,10 +11,16 @@ from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine.result import ResultProxy
 import json
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
  
 Base = declarative_base()
 
-POSTGRE_BASE = 'postgresql://test:test@localhost:5432/test'
+# POSTGRE_BASE = 'postgresql://postgres:root@localhost:5432/postgres'
+POSTGRE_BASE = os.getenv("POSTGRES_URI")
 MYSQL_BASE = 'mysql://test:test111@localhost/test'
 
 '''
